@@ -1,13 +1,11 @@
-import apdoptionDao from "../dao/AdoptionDao.js";
-
-class AdoptionService {
-	constructor(dao) {
-		this.dao = dao;
+export default class GenericDao {
+	constructor(model) {
+		this.model = model;
 	}
 
 	create = async (toCreate) => {
 		try {
-			return await this.dao.create(toCreate);
+			return await this.model.create(toCreate);
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -15,7 +13,7 @@ class AdoptionService {
 
 	getAll = async () => {
 		try {
-			return await this.dao.getAll({});
+			return await this.model.find({});
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -23,7 +21,7 @@ class AdoptionService {
 
 	getById = async (id) => {
 		try {
-			return await this.dao.getById(id);
+			return await this.model.findById(id);
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -31,7 +29,7 @@ class AdoptionService {
 
 	update = async (id, toUpdate) => {
 		try {
-			return await this.dao.update(id, toUpdate);
+			return await this.model.findByIdAndUpdate(id, toUpdate, { new: true });
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -39,12 +37,9 @@ class AdoptionService {
 
 	delete = async (id) => {
 		try {
-			return await this.dao.delete(id);
+			return await this.model.findByIdAndDelete(id);
 		} catch (error) {
 			throw new Error(error);
 		}
 	};
 }
-
-const adoptionService = new AdoptionService(apdoptionDao);
-export default adoptionService;

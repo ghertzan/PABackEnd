@@ -1,20 +1,11 @@
-import userDao from "../dao/UserDao.js";
-
-class UserService {
+export default class GenericRepository {
 	constructor(dao) {
 		this.dao = dao;
 	}
+
 	create = async (toCreate) => {
 		try {
 			return await this.dao.create(toCreate);
-		} catch (error) {
-			throw new Error(error);
-		}
-	};
-
-	getByEmail = async (email) => {
-		try {
-			return await this.dao.getByEmail(email);
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -38,7 +29,7 @@ class UserService {
 
 	update = async (id, toUpdate) => {
 		try {
-			return await this.dao.update(id, toUpdate);
+			return await this.dao.update(id, toUpdate, { new: true });
 		} catch (error) {
 			throw new Error(error);
 		}
@@ -52,6 +43,3 @@ class UserService {
 		}
 	};
 }
-
-const userService = new UserService(userDao);
-export default userService;

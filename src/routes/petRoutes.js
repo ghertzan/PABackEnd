@@ -3,10 +3,10 @@ import petController from "../controllers/PetController.js";
 
 const router = Router();
 
-router.post("/", petController.create);
-router.get("/", petController.getAll);
-router.get("/:pid", petController.getById);
-router.put("/:pid", petController.update);
-router.delete("/:id", petController.delete);
+router.post("/", petController.createPet);
+router.get("/", petController.getAllPets);
+router.get("/:pid", petController.getPetById);
+router.put("/:pid", petController.updatePet);
+router.delete("/:id", petController.deletePet);
 
 export default router;
