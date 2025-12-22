@@ -6,6 +6,7 @@ import petRouter from "./routes/petRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import adoptionRouter from "./routes/adoptionRoutes.js";
 import sessionRouter from "./routes/sessionRoutes.js";
+import mockingRoutes from "./routes/mocksRoutes.js";
 import { __dirname, join } from "./utils/utils.js";
 
 const app = express();
@@ -22,6 +23,7 @@ app.use("/api/pets", petRouter);
 app.use("/api/users", userRouter);
 app.use("/api/adoptions", adoptionRouter);
 app.use("/api/session", sessionRouter);
+app.use("/api/mocks", mockingRoutes);
 
 /* MONGO init */
 
