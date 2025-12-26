@@ -15,7 +15,7 @@ export default class GenericDao {
 		try {
 			return await this.model.insertMany(manyToInsert);
 		} catch (error) {
-			throw new Element(error);
+			throw new Error(error);
 		}
 	};
 

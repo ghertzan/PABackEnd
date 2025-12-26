@@ -15,7 +15,7 @@ export default class GenericRepository {
 		try {
 			return await this.dao.insertMany(manyToInsert);
 		} catch (error) {
-			throw new Element(error);
+			throw new Error(error);
 		}
 	};
 
