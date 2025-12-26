@@ -4,8 +4,7 @@ import { createHash } from "../utils/utils.js";
 import colors from "colors";
 import { faker } from "@faker-js/faker";
 
-
-const getMockPets = (qty=50) => {
+const getMockPets = (qty = 50) => {
 	return Array.from({ length: qty }, () => ({
 		_id: faker.database.mongodbObjectId(),
 		name: faker.animal.petName(),
@@ -13,9 +12,9 @@ const getMockPets = (qty=50) => {
 		birthDate: faker.date.birthdate({ mode: "age", min: 1, max: 5 }),
 		adopted: false,
 	}));
-}
+};
 
-const getMockUsers = (qty=50) => {
+const getMockUsers = (qty = 50) => {
 	return Array.from({ length: qty }, () => ({
 		_id: faker.database.mongodbObjectId(),
 		first_name: faker.person.firstName(),
@@ -25,7 +24,7 @@ const getMockUsers = (qty=50) => {
 		role: faker.helpers.arrayElement(["user", "admin"]),
 		adopted_pets: [],
 	}));
-}
+};
 
 const generatePets = (req, res) => {
 	const { qty = 50 } = req.params;
@@ -45,17 +44,8 @@ const generateData = async (req, res) => {
 	const toInsertPets = getMockPets(pets);
 
 	try {
-		for (let i = 0; i < toInsertUsers.length; i++) {
-			await userService.create(toInsertUsers[i]).then((user) => {
-				console.log(colors.bgWhite(user));
-			});
-		}
-
-		for (let i = 0; i < toInsertPets.length; i++) {
-			await petService.create(toInsertPets[i]).then((pet) => {
-				console.log(colors.bgCyan(pet));
-			});
-		}
+		await userService.insertMany(toInsertUsers);
+		await petService.insertMany(toInsertPets);
 	} catch (error) {
 		res.status(500).json({ status: "ERROR", message: error.message });
 	}

@@ -11,6 +11,14 @@ export default class GenericDao {
 		}
 	};
 
+	insertMany = async (manyToInsert) => {
+		try {
+			return await this.model.insertMany(manyToInsert);
+		} catch (error) {
+			throw new Element(error);
+		}
+	};
+
 	getAll = async () => {
 		try {
 			return await this.model.find({});

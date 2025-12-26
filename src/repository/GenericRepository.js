@@ -11,6 +11,14 @@ export default class GenericRepository {
 		}
 	};
 
+	insertMany = async (manyToInsert) => {
+		try {
+			return await this.dao.insertMany(manyToInsert);
+		} catch (error) {
+			throw new Element(error);
+		}
+	};
+
 	getAll = async () => {
 		try {
 			return await this.dao.getAll({});
