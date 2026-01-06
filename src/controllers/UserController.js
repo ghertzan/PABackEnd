@@ -1,3 +1,4 @@
+import UserDto from "../dto/UserDto.js";
 import { userService } from "../services/index.js";
 import { createHash } from "../utils/utils.js";
 
@@ -53,7 +54,11 @@ const getAllUsers = async (req, res) => {
 		if (users.length === 0) {
 			return res.status(404).json({ message: "No users found", payload: null });
 		}
-		res.status(200).json({ message: "Existing users", payload: users });
+		const usersDtos = users.map((user) => {
+			return UserDto.getUserDto(user);
+		});
+
+		res.status(200).json({ message: "Existing users", payload: usersDtos });
 	} catch (error) {
 		res.status(500).json({
 			message: "Internal Server Error",
