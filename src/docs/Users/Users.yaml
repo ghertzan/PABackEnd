@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: API de Gestión de Usuarios
+  description: >
+    Esta es una API de ejemplo para demostrar la estructura de OpenAPI (Swagger).
+    Permite gestionar usuarios, incluyendo creación, lectura, actualización y eliminación.
+  version: 1.0.0
+  contact:
+    name: Gabriel
+    email: gabriel.hertzan@gmail.com
+
+paths:
+  /api/users:
+    get:
+      summary: Obtiene todos los usuarios
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Lista de usuarios
+        '500':
+          description: Error al obtener los usuarios - Error en el servidor
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID del usuario - autogenerado por MongoDB
+        first_name:
+          type: String
+          description: Nombre del usuario
+          required: true
+        last_name:
+          type: String
+          description: Apellido del usuario
+          required: true
+        email:
+          type: String
+          description: Email del usuario
+          required: true
+          unique: true
+        password:
+          type: String
+          description: Contraseña del usuario
+          required: true
+        role:
+          type: String
+          enum:
+            - user
+            - admin
+          default: user
+        adopted_pets:
+          - _id: false
+            pet_id:
+              type: ObjectId
+              ref: Pets
+      required:
+        - first_name
+        - last_name
+        - email
+        - password
+      enum:
+        - user
+        - admin
+      default: user
+      adopted_pets:
+        - _id: false
+          pet_id:
+            type: ObjectId
+            ref: Pets
+      example:
+        _id: 651f2b3c4d5e6f7a8b9c0d1e
+        first_name: Gabriel
+        last_name: Hertzan
+        email: gabriel.hertzan@gmail.com
+        password: 123456
+        role: user
+        adopted_pets: []
