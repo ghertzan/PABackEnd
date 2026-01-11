@@ -16,66 +16,111 @@ paths:
       tags:
         - Users
       responses:
-        '200':
+        "200":
           description: Lista de usuarios
-        '500':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserDto"
+        "500":
           description: Error al obtener los usuarios - Error en el servidor
+
+  /api/users/{uid}:
+    get:
+      summary: Trae la info del usuario por el ID de Mongo
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: Id del usuario que se deseas traer
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto"
+        "404":
+          description: Usuario no encontrado
+        "500":
+          description: Error del servidor, La respuesta incluye información del error.
 
 components:
   schemas:
     User:
       type: object
-      properties:
-        _id:
-          type: ObjectId
-          description: ID del usuario - autogenerado por MongoDB
-        first_name:
-          type: String
-          description: Nombre del usuario
-          required: true
-        last_name:
-          type: String
-          description: Apellido del usuario
-          required: true
-        email:
-          type: String
-          description: Email del usuario
-          required: true
-          unique: true
-        password:
-          type: String
-          description: Contraseña del usuario
-          required: true
-        role:
-          type: String
-          enum:
-            - user
-            - admin
-          default: user
-        adopted_pets:
-          - _id: false
-            pet_id:
-              type: ObjectId
-              ref: Pets
       required:
         - first_name
         - last_name
         - email
         - password
-      enum:
-        - user
-        - admin
-      default: user
-      adopted_pets:
-        - _id: false
-          pet_id:
-            type: ObjectId
-            ref: Pets
-      example:
-        _id: 651f2b3c4d5e6f7a8b9c0d1e
-        first_name: Gabriel
-        last_name: Hertzan
-        email: gabriel.hertzan@gmail.com
-        password: 123456
-        role: user
-        adopted_pets: []
+      properties:
+        _id:
+          type: string
+          description: ID del usuario - autogenerado por MongoDB
+          example: "651f2b3c4d5e6f7a8b9c0d1e"
+        first_name:
+          type: string
+          description: Nombre del usuario
+          example: "Gabriel"
+        last_name:
+          type: string
+          description: Apellido del usuario
+          example: "Hertzan"
+        email:
+          type: string
+          format: email
+          description: Email del usuario
+          example: "gabriel.hertzan@gmail.com"
+        password:
+          type: string
+          format: password
+          description: Contraseña del usuario
+          example: "123456"
+        role:
+          type: string
+          description: Rol del usuario
+          enum:
+            - user
+            - admin
+          default: user
+          example: "user"
+        adopted_pets:
+          type: array
+          items:
+            type: object
+            properties:
+              pet_id:
+                type: string
+                description: ID de la mascota referenciada
+                example: "507f1f77bcf86cd799439011"
+
+    UserDto:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del usuario - autogenerado por MongoDB
+          example: "3c0eb453ff45facaadce7039"
+        name:
+          type: string
+          description: Nombre y apellido del usuario concatenado
+          example: "Blick, Walter"
+        role:
+          type: string
+          description: Rol del usuario
+          enum:
+            - user
+            - admin
+          example: "admin"
+        email:
+          type: string
+          format: email
+          description: Email del usuario
+          example: "Conner.Kuhn@yahoo.com"

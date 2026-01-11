@@ -66,6 +66,23 @@ const getAllUsers = async (req, res) => {
 	}
 };
 
+const getById = async (req, res) => {
+	const { uid } = req.params;
+	try {
+		const userFound = await userService.getById(uid);
+		if (!userFound) {
+			return res
+				.status(404)
+				.json({ status: "Error", message: "No user found" });
+		}
+		res
+			.status(200)
+			.json({ status: " OK", payload: UserDto.getUserDto(userFound) });
+	} catch (error) {
+		res.status(500).json({ status: "Error", message: error.message });
+	}
+};
+
 const updateUser = async (req, res) => {
 	const { pid } = req.params;
 	const toUpdate = req.body;
@@ -100,6 +117,7 @@ export default {
 	createUser,
 	getAllUsers,
 	getUserByEmail,
+	getById,
 	updateUser,
 	deleteUser,
 };

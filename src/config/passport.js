@@ -1,8 +1,10 @@
 import passport from "passport";
 import local from "passport-local";
+import jwt from "passport-jwt";
 import { userService } from "../services/index.js";
 import { isValidPassword } from "../utils/utils.js";
 import userDto from "../dto/UserDto.js";
+import envs from "./envs.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -11,18 +13,34 @@ const initializePassport = () => {
 		"login",
 		new LocalStrategy(
 			{
-				usernameField: email,
+				usernameField: "email",
 			},
 			async (username, password, done) => {
 				try {
-					const userFound = userService.getByEmail(username);
-					if (!userFound) throw new Error(`${username}, already used.`);
+					const userFound = await userService.getByEmail(username);
+					if (!userFound) throw new Error("Credential error/s");
 					const isValidPass = isValidPassword(password, userFound.password);
-					if (!isValidPass) throw new Error("Credential errors");
+					if (!isValidPass) throw new Error("Credential error/s");
 					const user = userDto.getUserDto(userFound);
 					done(null, user);
 				} catch (error) {
 					done(error, null);
+				}
+			}
+		)
+	);
+	passport.use(
+		"jwt",
+		new jwt.Strategy(
+			{
+				jwtFromRequest: jwt.ExtractJwt.fromExtractors([cookieExtractor]),
+				secretOrKey: envs.JWT_SECRET,
+			},
+			async (jwt_payload, done) => {
+				try {
+					return done(null, jwt_payload);
+				} catch (error) {
+					return done(error);
 				}
 			}
 		)
@@ -37,3 +55,13 @@ const initializePassport = () => {
 		done(null, user);
 	});
 };
+
+const cookieExtractor = (req) => {
+	let token = null;
+	if (req && req.cookies) {
+		token = req.cookies["authCookie"];
+	}
+	return token;
+};
+
+export { initializePassport };

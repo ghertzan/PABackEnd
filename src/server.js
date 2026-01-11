@@ -8,8 +8,14 @@ import adoptionRouter from "./routes/adoptionRoutes.js";
 import sessionRouter from "./routes/sessionRoutes.js";
 import mockingRoutes from "./routes/mocksRoutes.js";
 import { __dirname, join } from "./utils/utils.js";
+import { initializePassport } from "./config/passport.js";
+import MongoStore from "connect-mongo";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import passport from "passport";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
+import { fa } from "@faker-js/faker";
 
 const app = express();
 
@@ -31,8 +37,23 @@ const specs = swaggerJSDoc(swaggerOptions);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+	session({
+		store: MongoStore.create({
+			mongoUrl: envs.DB_MONGO_ATLAS_URL,
+			ttl: 6000,
+		}),
+		secret: envs.SECRET,
+		resave: false,
+		saveUninitialized: false,
+	})
+);
 app.use(express.static(join(__dirname, "../public")));
+app.use(cookieParser());
 app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api/pets", petRouter);
 app.use("/api/users", userRouter);

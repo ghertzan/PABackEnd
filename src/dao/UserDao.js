@@ -8,7 +8,7 @@ class UserDao extends GenericDao {
 
 	getByEmail = async (email) => {
 		try {
-			console.log(await this.model.findOne({ email }));
+			// console.log(await this.model.findOne({ email }));
 
 			return await this.model.findOne({ email: email });
 		} catch (error) {
