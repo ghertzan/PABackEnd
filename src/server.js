@@ -20,6 +20,7 @@ import { fa } from "@faker-js/faker";
 const app = express();
 
 app.set("PORT", envs.API_PORT);
+console.log("DB_MONGO_ATLAS_URL:", envs.DB_MONGO_ATLAS_URL);
 
 /* MIDDLEWARES */
 const swaggerOptions = {

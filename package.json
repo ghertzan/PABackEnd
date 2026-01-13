@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "node --watch --env-file=.env ./src/test.js",
+    "test": "node --env-file=.env ./node_modules/mocha/bin/mocha.js tests/**/*.test.js --timeout 5000 --exit",
     "dev": "node --watch --env-file=.env ./src/server.js"
   },
   "keywords": [],
@@ -13,6 +13,8 @@
   "type": "module",
   "devDependencies": {
     "@faker-js/faker": "^10.1.0",
+    "chai": "^6.2.2",
+    "mocha": "^11.7.5",
     "nodemon": "^3.1.11"
   },
   "dependencies": {
