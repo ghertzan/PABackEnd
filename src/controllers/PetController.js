@@ -31,7 +31,6 @@ const getAllPets = async (req, res) => {
 
 const getPetById = async (req, res) => {
 	const { pid } = req.params;
-	console.log(pid);
 
 	try {
 		const petFound = await petService.getById(pid);
@@ -67,7 +66,7 @@ const updatePet = async (req, res) => {
 const deletePet = async (req, res) => {
 	const { pid } = req.params;
 	try {
-		const deletedPet = petService.delete(pid);
+		const deletedPet = await petService.delete(pid);
 		res.status(200).json({ message: "Deleted:", payload: deletedPet });
 	} catch (error) {
 		res.status(500).json({

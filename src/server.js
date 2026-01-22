@@ -20,7 +20,6 @@ import { fa } from "@faker-js/faker";
 const app = express();
 
 app.set("PORT", envs.API_PORT);
-console.log("DB_MONGO_ATLAS_URL:", envs.DB_MONGO_ATLAS_URL);
 
 /* MIDDLEWARES */
 const swaggerOptions = {
@@ -47,7 +46,7 @@ app.use(
 		secret: envs.SECRET,
 		resave: false,
 		saveUninitialized: false,
-	})
+	}),
 );
 app.use(express.static(join(__dirname, "../public")));
 app.use(cookieParser());
@@ -70,7 +69,7 @@ initMongoDB();
 app.listen(app.get("PORT"), () => {
 	console.log(
 		colors.bgYellow.bold(
-			`Server running on http://localhost:${app.get("PORT")} `
-		)
+			`Server running on http://localhost:${app.get("PORT")} `,
+		),
 	);
 });

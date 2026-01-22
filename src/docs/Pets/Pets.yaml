@@ -1,0 +1,205 @@
+openapi: 3.0.3
+info:
+  title: API de Mascotas
+  description: API para la gestión de mascotas (adopción, creación, listado).
+  version: 1.0.0
+
+paths:
+  /api/pets:
+    get:
+      summary: Obtener todas las mascotas
+      tags:
+        - Pets
+      responses:
+        "200":
+          description: Lista de mascotas obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Existing pets"
+                  payload:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Pet"
+        "404":
+          description: No se encontraron mascotas en la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "No pets found"
+                  payload:
+                    type: string
+                    nullable: true
+                    example: null
+        "500":
+          description: Error interno del servidor
+
+    post:
+      summary: Crear una nueva mascota
+      tags:
+        - Pets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PetInput"
+      responses:
+        "200":
+          description: Mascota creada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Pet Created"
+                  payload:
+                    $ref: "#/components/schemas/Pet"
+        "500":
+          description: Error al crear la mascota
+
+  /api/pets/{pid}:
+    parameters:
+      - name: pid
+        in: path
+        required: true
+        description: ID de la mascota (MongoDB ObjectId)
+        schema:
+          type: string
+          example: "64c9e1b2f1a3b9001c8e4d5a"
+
+    get:
+      summary: Obtener mascota por ID
+      tags:
+        - Pets
+      responses:
+        "200":
+          description: Mascota encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Requested pet:"
+                  payload:
+                    $ref: "#/components/schemas/Pet"
+        "404":
+          description: Mascota no encontrada
+        "500":
+          description: Error del servidor
+
+    put:
+      summary: Actualizar mascota
+      tags:
+        - Pets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PetInput"
+      responses:
+        "200":
+          description: Mascota actualizada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Updated pet:"
+                  payload:
+                    $ref: "#/components/schemas/Pet"
+        "404":
+          description: No se pudo actualizar (Mascota no encontrada)
+        "500":
+          description: Error del servidor
+
+    delete:
+      summary: Eliminar mascota
+      tags:
+        - Pets
+      responses:
+        "200":
+          description: Mascota eliminada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Deleted:"
+                  payload:
+                    $ref: "#/components/schemas/Pet"
+        "500":
+          description: Error del servidor
+
+components:
+  schemas:
+    PetInput:
+      type: object
+      required:
+        - name
+        - specie
+      properties:
+        name:
+          type: string
+          description: Nombre de la mascota
+          example: "Orejitas"
+        specie:
+          type: string
+          description: Especie (perro, gato, etc.)
+          example: "rabbit"
+        birthDate:
+          type: string
+          format: date
+          description: Fecha de nacimiento
+          example: "2022-05-20"
+        image:
+          type: string
+          description: URL de la imagen de la mascota
+          example: "http://localhost:8080/img/rabbit.jpg"
+
+    Pet:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "64c9e1b2f1a3b9001c8e4d5a"
+        name:
+          type: string
+          example: "Orejitas"
+        specie:
+          type: string
+          example: "rabbit"
+        birthDate:
+          type: string
+          format: date
+          example: "2022-05-20"
+        adopted:
+          type: boolean
+          description: Estado de adopción
+          default: false
+          example: false
+        owner:
+          type: string
+          nullable: true
+          description: ID del usuario dueño (si está adoptado)
+          example: null
+        image:
+          type: string
+          example: "http://localhost:8080/img/rabbit.jpg"

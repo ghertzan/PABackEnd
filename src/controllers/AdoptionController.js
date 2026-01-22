@@ -1,19 +1,34 @@
-import { adoptionService } from "../services/index.js";
+import { adoptionService, petService, userService } from "../services/index.js";
 
 const createAdoption = async (req, res) => {
 	const { pid, uid } = req.params;
 	try {
-		const newAdoption = await adoptionService.create({
-			pet_id: pid,
-			owner_user_id: uid,
-		});
-		res.status(200).json({
+		const user = await userService.getById(uid);
+		const pet = await petService.getById(pid);
+		if (!user) {
+			return res
+				.status(404)
+				.json({ status: "Error", message: "User not found" });
+		}
+		if (!pet) {
+			return res
+				.status(404)
+				.json({ status: "Error", message: "Pet not found" });
+		}
+		if (pet.adopted) {
+			return res.status(400).json({
+				status: "Error",
+				message: `Pet already adopted by: ${pet.owner} ID.`,
+			});
+		}
+		const newAdoption = await adoptionService.create(uid, pid);
+		res.status(201).json({
 			message: "Adoption success",
 			payload: newAdoption,
 		});
 	} catch (error) {
 		res.status(500).json({
-			message: "Unable to create... see the error log.",
+			status: "Error - Unable to create... see the error log.",
 			error: error.message,
 		});
 	}
@@ -27,9 +42,7 @@ const getAllAdoptions = async (req, res) => {
 				.status(404)
 				.json({ message: "No adoptions found", payload: null });
 		}
-		res
-			.status(200)
-			.json({ message: "Existing adoptions", payload: await adoptions });
+		res.status(200).json({ message: "Existing adoptions", payload: adoptions });
 	} catch (error) {
 		res.status(500).json({
 			message: "Internal Server Error",
@@ -76,10 +89,10 @@ const updateAdoption = async (req, res) => {
 };
 
 const deleteAdoption = async (req, res) => {
-	const { pid } = req.params;
+	const { aid } = req.params;
 	try {
-		const deletedPet = adoptionService.delete(pid);
-		res.status(200).json({ message: "Deleted:", payload: deletedPet });
+		const deletedAdoption = await adoptionService.delete(aid);
+		res.status(200).json({ message: "Deleted:", payload: deletedAdoption });
 	} catch (error) {
 		res.status(500).json({
 			message: "Internal Server Error",

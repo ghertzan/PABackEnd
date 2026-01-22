@@ -5,8 +5,8 @@ import { createHash } from "../utils/utils.js";
 const createUser = async (req, res) => {
 	const { first_name, last_name, email, age, role, password } = req.body;
 	try {
-		const userFound = userService.getByEmail(email);
-		if (!userFound) {
+		const userFound = await userService.getByEmail(email);
+		if (userFound) {
 			return res
 				.status(400)
 				.json({ status: "Error", message: `${email}, already used` });
@@ -20,7 +20,7 @@ const createUser = async (req, res) => {
 			adoptedPets: [],
 		};
 		const user = await userService.create(newUser);
-		res.status(200).json({ message: "User Created", payload: user._id });
+		res.status(201).json({ message: "User Created", payload: user._id });
 	} catch (error) {
 		res.status(500).json({
 			message: "Unable to create... see the error log.",
@@ -33,7 +33,7 @@ const getUserByEmail = async (req, res) => {
 	const { email } = req.params;
 
 	try {
-		const userFound = await this.getByEmail(email);
+		const userFound = await userService.getByEmail(email);
 		if (!userFound) {
 			return res.status(404).json({ message: "No user found", payload: null });
 		}
@@ -84,14 +84,14 @@ const getById = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-	const { pid } = req.params;
+	const { uid } = req.params;
 	const toUpdate = req.body;
 	try {
-		const updatedPet = await userService.update(pid, toUpdate);
-		if (!updatedPet) {
+		const updatedUser = await userService.update(uid, toUpdate);
+		if (!updatedUser) {
 			return res.status(404).json({ message: "Can't Update", payload: null });
 		}
-		res.status(200).json({ message: "Updated pet:", payload: updatedPet });
+		res.status(200).json({ message: "Updated user:", payload: updatedUser });
 	} catch (error) {
 		res.status(500).json({
 			message: "Internal Server Error",
@@ -101,10 +101,10 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-	const { pid } = req.params;
+	const { uid } = req.params;
 	try {
-		const deletedPet = userService.delete(pid);
-		res.status(200).json({ message: "Deleted:", payload: deletedPet });
+		const deletedUser = await userService.delete(uid);
+		res.status(200).json({ message: "Deleted:", payload: deletedUser });
 	} catch (error) {
 		res.status(500).json({
 			message: "Internal Server Error",
