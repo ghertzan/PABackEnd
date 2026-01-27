@@ -60,7 +60,9 @@ const getAdoptionById = async (req, res) => {
 				.status(404)
 				.json({ message: "No adoption found", payload: null });
 		}
-		res.status(200).json({ message: "Requested pet:", payload: adoptionFound });
+		res
+			.status(200)
+			.json({ message: "Requested adoption:", payload: adoptionFound });
 	} catch (error) {
 		res.status(500).json({
 			message: "Internal Server Error",
