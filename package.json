@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "node ./src/server.js",
     "test": "node --env-file=.env ./node_modules/mocha/bin/mocha.js tests/**/SuperTest.test.js --timeout 5000 --exit",
     "dev": "node --watch --env-file=.env ./src/server.js"
   },
