@@ -154,13 +154,13 @@ components:
       type: object
       required:
         - name
-        - specie
+        - species
       properties:
         name:
           type: string
           description: Nombre de la mascota
           example: "Orejitas"
-        specie:
+        species:
           type: string
           description: Especie (perro, gato, etc.)
           example: "rabbit"

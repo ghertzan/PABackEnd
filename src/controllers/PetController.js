@@ -31,7 +31,6 @@ const getAllPets = async (req, res) => {
 
 const getPetById = async (req, res) => {
 	const { pid } = req.params;
-
 	try {
 		const petFound = await petService.getById(pid);
 		if (!petFound) {
@@ -51,13 +50,10 @@ const updatePet = async (req, res) => {
 	const toUpdate = req.body;
 	try {
 		const updatedPet = await petService.update(pid, toUpdate);
-		if (!updatedPet) {
-			return res.status(404).json({ message: "Can't Update", payload: null });
-		}
 		res.status(200).json({ message: "Updated pet:", payload: updatedPet });
 	} catch (error) {
-		res.status(500).json({
-			message: "Internal Server Error",
+		res.status(error.status || 500).json({
+			status: "Error",
 			error: error.message,
 		});
 	}
