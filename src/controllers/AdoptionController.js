@@ -9,7 +9,7 @@ const createAdoption = async (req, res) => {
 			payload: newAdoption,
 		});
 	} catch (error) {
-		res.status(error.status | error).json({
+		res.status(error.status || 500).json({
 			status: "Error - Unable to create... see the error log.",
 			error: error.message,
 		});
@@ -59,7 +59,7 @@ const deleteAdoption = async (req, res) => {
 		const deletedAdoption = await adoptionService.delete(aid);
 		res.status(200).json({ message: "Deleted:", payload: deletedAdoption });
 	} catch (error) {
-		res.status(error.status).json({
+		res.status(error.status || 500).json({
 			message: "Internal Server Error",
 			error: error.message,
 		});
