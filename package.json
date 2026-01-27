@@ -2,7 +2,7 @@
   "name": "pabackend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "node --env-file=.env ./node_modules/mocha/bin/mocha.js tests/**/SuperTest.test.js --timeout 5000 --exit",
     "dev": "node --watch --env-file=.env ./src/server.js"
