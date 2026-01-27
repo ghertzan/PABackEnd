@@ -63,7 +63,7 @@ app.use("/api/mocks", mockingRoutes);
 
 /* MONGO init */
 
-initMongoDB(envs.DB_MONGO_TEST);
+initMongoDB(envs.DB_MONGO_ATLAS_URL);
 
 /* SERVIDOR */
 app.listen(app.get("PORT"), () => {
