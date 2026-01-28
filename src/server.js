@@ -15,7 +15,7 @@ import cookieParser from "cookie-parser";
 import passport from "passport";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
-import { fa } from "@faker-js/faker";
+import { logger } from "./utils/logger.js";
 
 const app = express();
 
@@ -67,9 +67,5 @@ initMongoDB(envs.DB_MONGO_TEST);
 
 /* SERVIDOR */
 app.listen(app.get("PORT"), () => {
-	console.log(
-		colors.bgYellow.bold(
-			`Server running on http://localhost:${app.get("PORT")} `,
-		),
-	);
+	logger.info(`Server running on http://localhost:${app.get("PORT")} `);
 });
