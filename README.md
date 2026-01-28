@@ -27,6 +27,7 @@ docker run -p 8080:8080 \
   -e DB_MONGO_ATLAS_URL="mongodb+srv://<USER>:<PASS>@<CLUSTER>.mongodb.net/Adoptme" \
   -e JWT_SECRET="tu_secreto_super_seguro" \
   -e SECRET="otro_secreto" \
+  -e NODE_ENV="production" \
   ghertzan/adoptme-backend:latest
 ```
 
@@ -36,6 +37,7 @@ Asegurate de definir estas variables para que todo ande joya:
 - `DB_MONGO_ATLAS_URL`: La connection string a tu base de datos MongoDB (Atlas o local).
 - `JWT_SECRET`: Para firmar los tokens de sesión.
 - `SECRET`: Clave adicional de seguridad (si aplica).
+- `NODE_ENV`: El entorno de ejecución (ej. `production` o `development`).
 
 ## 🚀 Cómo levantarlo
 
