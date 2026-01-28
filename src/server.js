@@ -62,8 +62,11 @@ app.use("/api/session", sessionRouter);
 app.use("/api/mocks", mockingRoutes);
 
 /* MONGO init */
-
-initMongoDB(envs.DB_MONGO_TEST);
+try {
+	initMongoDB(envs.DB_MONGO_ATLAS_URL);
+} catch (error) {
+	logger.error(error.message);
+}
 
 /* SERVIDOR */
 app.listen(app.get("PORT"), () => {

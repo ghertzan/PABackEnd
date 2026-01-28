@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import envs from "../config/envs.js";
-import colors from "colors";
+
 import { logger } from "../utils/logger.js";
 
 const initMongoDB = async (URL) => {
@@ -9,7 +8,7 @@ const initMongoDB = async (URL) => {
 		logger.info(`Mongo is ON!`);
 	} catch (error) {
 		logger.error(`${error.message}`);
-		throw new Error(error);
+		throw new Error(error.message);
 	}
 };
 
