@@ -11,7 +11,31 @@ Para armar este proyecto, usamos un stack bastante sólido:
 - **MongoDB & Mongoose**: Nuestra base de datos NoSQL y el ODM para modelar los datos.
 - **Passport & JWT**: Para manejar la autenticación y seguridad de los usuarios (porque la seguridad ante todo, che).
 - **Bcrypt**: Para hashear las contraseñas y que nadie se haga el vivo.
-- **Faker.js**: Para generar datos de prueba y mockear usuarios/mascotas cuando haga falta.
+- Faker.js: Para generar datos de prueba y mockear usuarios/mascotas cuando haga falta.
+
+## 🐳 Docker
+
+¿Preferís usar Docker? ¡Buenísimo! Ya tenemos una imagen lista para usar en Docker Hub.
+
+👉 **[Ir a la imagen en Docker Hub](https://hub.docker.com/repository/docker/ghertzan/adoptme-backend/general)**
+
+Para correr el contenedor, necesitás pasarle las variables de entorno clave. Acá tenés un ejemplo de cómo hacerlo:
+
+```bash
+docker run -p 8080:8080 \
+  -e API_PORT=8080 \
+  -e DB_MONGO_ATLAS_URL="mongodb+srv://<USER>:<PASS>@<CLUSTER>.mongodb.net/Adoptme" \
+  -e JWT_SECRET="tu_secreto_super_seguro" \
+  -e SECRET="otro_secreto" \
+  ghertzan/adoptme-backend:latest
+```
+
+### Variables de Entorno Requeridas
+Asegurate de definir estas variables para que todo ande joya:
+- `API_PORT`: El puerto donde escucha la app (interno del container).
+- `DB_MONGO_ATLAS_URL`: La connection string a tu base de datos MongoDB (Atlas o local).
+- `JWT_SECRET`: Para firmar los tokens de sesión.
+- `SECRET`: Clave adicional de seguridad (si aplica).
 
 ## 🚀 Cómo levantarlo
 
