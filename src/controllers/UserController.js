@@ -3,7 +3,7 @@ import { userService } from "../services/index.js";
 import { createHash } from "../utils/utils.js";
 
 const createUser = async (req, res) => {
-	const { first_name, last_name, email, age, role, password } = req.body;
+	const { first_name, last_name, email, role, password } = req.body;
 	try {
 		const userFound = await userService.getByEmail(email);
 		if (userFound) {
@@ -17,7 +17,7 @@ const createUser = async (req, res) => {
 			email,
 			password: createHash(password),
 			role,
-			adoptedPets: [],
+			adopted_pets: [],
 		};
 		const user = await userService.create(newUser);
 		res.status(201).json({ message: "User Created", payload: user._id });
@@ -85,13 +85,13 @@ const getById = async (req, res) => {
 
 const updateUser = async (req, res) => {
 	const { uid } = req.params;
-	const toUpdate = req.body;
+	const { first_name, last_name } = req.body;
 	try {
-		const updatedUser = await userService.update(uid, toUpdate);
+		const updatedUser = await userService.update(uid, { first_name, last_name });
 		if (!updatedUser) {
 			return res.status(404).json({ message: "Can't Update", payload: null });
 		}
-		res.status(200).json({ message: "Updated user:", payload: updatedUser });
+		res.status(200).json({ message: "Updated user:", payload: UserDto.getUserDto(updatedUser) });
 	} catch (error) {
 		res.status(500).json({
 			message: "Internal Server Error",

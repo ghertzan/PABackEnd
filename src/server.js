@@ -59,7 +59,9 @@ app.use("/api/pets", petRouter);
 app.use("/api/users", userRouter);
 app.use("/api/adoptions", adoptionRouter);
 app.use("/api/session", sessionRouter);
-app.use("/api/mocks", mockingRoutes);
+if (envs.NODE_ENV !== "production") {
+	app.use("/api/mocks", mockingRoutes);
+}
 
 /* MONGO init */
 try {

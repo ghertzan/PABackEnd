@@ -46,13 +46,10 @@ const generateData = async (req, res) => {
 	try {
 		await userService.insertMany(toInsertUsers);
 		await petService.insertMany(toInsertPets);
+		res.status(200).json({ status: "OK", message: "Fake data inserted successfully" });
 	} catch (error) {
 		res.status(500).json({ status: "ERROR", message: error.message });
 	}
-
-	res
-		.status(200)
-		.json({ status: "OK", message: "Fake data inserted successfully" });
 };
 export default {
 	generatePets,
