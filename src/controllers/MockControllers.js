@@ -15,12 +15,13 @@ const getMockPets = (qty = 50) => {
 };
 
 const getMockUsers = (qty = 50) => {
+	const password = createHash("coder123");
 	return Array.from({ length: qty }, () => ({
 		_id: faker.database.mongodbObjectId(),
 		first_name: faker.person.firstName(),
 		last_name: faker.person.lastName(),
 		email: faker.internet.email(),
-		password: createHash("coder123"),
+		password: password,
 		role: faker.helpers.arrayElement(["user", "admin"]),
 		adopted_pets: [],
 	}));
